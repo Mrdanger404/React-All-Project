@@ -1,11 +1,11 @@
-import Count from "./Component/Count"
+import Event_handler from "./COMPONENT/Event_handler"
 
 
 function App() {
 
   return (
     <>
-      <Count />
+      <Event_handler />
     </>
   )
 }
