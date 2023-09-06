@@ -19,10 +19,11 @@ class Event_handler extends Component {
   }
 
   render() {
+    const {changedValue} =this.state
     return (
       <>
         <input type='text' onChange={this.handleChange} />
-        <p>{this.state.changedValue}</p>
+        <p>{changedValue}</p>
       </>
     )
   }
