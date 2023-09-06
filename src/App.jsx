@@ -1,11 +1,11 @@
-import Event_handler from "./COMPONENT/Event_handler"
+import UseState from "./COMPONENT/UseState"
 
 
 function App() {
 
   return (
     <>
-      <Event_handler />
+      <UseState />
     </>
   )
 }
