@@ -1,11 +1,11 @@
-import UpdateState from "./UPDATE-STATE/UpdateState"
+import Form from './COMPONENT/Form'
 
 
 function App() {
 
   return (
     <>
-      <UpdateState />
+      <Form />
     </>
   )
 }
