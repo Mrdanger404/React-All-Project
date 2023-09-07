@@ -1,11 +1,11 @@
-import UseState from "./COMPONENT/UseState"
+import UpdateState from "./UPDATE-STATE/UpdateState"
 
 
 function App() {
 
   return (
     <>
-      <UseState />
+      <UpdateState />
     </>
   )
 }
