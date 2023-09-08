@@ -1,11 +1,11 @@
-import Form from './COMPONENT/Form'
+import FORM from './COMPONENT/Form'
 
 
 function App() {
 
   return (
     <>
-      <Form />
+      <FORM />
     </>
   )
 }
