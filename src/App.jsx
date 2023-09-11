@@ -1,11 +1,12 @@
-import FORM from './COMPONENT/Form'
+import Timer from "./COMPONENTS/Timer"
+
 
 
 function App() {
 
   return (
     <>
-      <FORM />
+      <Timer />
     </>
   )
 }
