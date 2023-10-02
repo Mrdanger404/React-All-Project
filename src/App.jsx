@@ -1,15 +1,10 @@
-
-import FormTodo from "./Component/FormTodo"
-
-
-
-
+import FormValidation from "./Component/FormValidation"
 
 function App() {
 
   return (
     <>
-      <FormTodo />
+      <FormValidation />
 
     </>
   )
