@@ -1,10 +1,11 @@
-import FormValidation from "./Component/FormValidation"
+import Toggle from "./Component/Toggle"
+
 
 function App() {
 
   return (
     <>
-      <FormValidation />
+      <Toggle />
 
     </>
   )
