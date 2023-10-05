@@ -1,12 +1,11 @@
-import Toggle from "./Component/Toggle"
+import StudentForm from "./Component/StudentForm"
 
 
 function App() {
 
   return (
     <>
-      <Toggle />
-
+      <StudentForm />
     </>
   )
 }
