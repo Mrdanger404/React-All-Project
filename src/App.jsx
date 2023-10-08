@@ -1,11 +1,13 @@
-import StudentForm from "./Component/StudentForm"
+import Rout from "./COMPONENT/Rout"
+
+
 
 
 function App() {
 
   return (
     <>
-      <StudentForm />
+      <Rout />
     </>
   )
 }
