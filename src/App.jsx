@@ -1,13 +1,10 @@
-import Rout from "./COMPONENT/Rout"
-
-
-
+import Path from "./COMPONENT/LINK/Path"
 
 function App() {
 
   return (
     <>
-      <Rout />
+      <Path />
     </>
   )
 }
