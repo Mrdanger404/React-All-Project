@@ -1,4 +1,4 @@
-import Path from "./COMPONENT/LINK/Path"
+import Path from "./COMPONENT/LINK/PATH/Path"
 
 function App() {
 

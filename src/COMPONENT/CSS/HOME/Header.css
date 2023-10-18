@@ -1,0 +1,140 @@
+*{
+    margin: 0;
+    box-sizing: border-box;
+}
+.logo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 25%;
+}
+.logo img{
+    height: 40px;
+    width: 50px;
+}
+.search{
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50%;
+}
+.search button{
+    margin: 0 10px;
+    border: none;
+    height: 30px;
+    width: 100px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    background-color: rgb(122, 189, 122);
+}
+.search button:focus{
+    background-color: rgb(0, 100, 0);
+}
+.inputSearch{
+    width: 100%;
+    border: none;
+    height: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+}
+.authBtn{
+    text-align: right;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 25%;
+}
+.authBtn button{
+    margin: 10px;
+    height: 30px;
+    width: 60px;
+    background-color: rgb(122, 189, 122);
+    border: none;
+    border-radius: 10px;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    -ms-border-radius: 10px;
+    -o-border-radius: 10px;
+    font-weight: bold;
+    color: white;
+}
+.link{
+    text-decoration: none;
+
+}
+.active{
+    background-color: orange;
+}
+.authBtn button:hover{
+    background-color: rgb(0, 100, 0);
+}
+
+.header{
+    height: 60px;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    background-color: aqua;
+    z-index: -3;
+
+}
+
+.menu{
+    background-color: rgba(0,100,0);
+    text-align: center;
+    position: fixed;
+    width: 100%;
+    z-index: 10;
+}
+.menu ul{
+    display: inline-flex;
+    list-style: none;
+    color: #fff;
+}
+.menu ul li{
+    width: 120px;
+    margin: 0 15px;
+    padding: 15px;
+}
+.menu ul li a{
+    text-decoration: none;
+    color: #fff;
+}
+.active, .menu ul li:hover{
+    padding: 10px;
+    background-color: #2b2b2b;
+    border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+}
+.sub-menu-1{
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu ul li:hover .sub-menu-1{
+    display: block;
+    position: absolute;
+    background-color: rgb(0, 100, 0);
+    margin-top: 15px;
+    margin-left: -15px;
+}
+.menu ul li:hover .sub-menu-1 ul{
+    display: block;
+    margin: 10px;
+}
+

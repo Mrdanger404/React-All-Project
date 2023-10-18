@@ -1,0 +1,25 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.offer{
+    margin-top: 50px;
+    border: 1px solid black;
+    height: 200px;
+    display: flex;
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+    align-items: center;
+    
+}
+.offer img{
+    padding: 0 10px;
+    height: 150px;
+
+}
+.offer::-webkit-scrollbar{
+    display: none;
+}
+
