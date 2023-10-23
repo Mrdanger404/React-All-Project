@@ -1,25 +1,56 @@
+import { useEffect, useState } from 'react'
 import '../../CSS/PRODUCTPAGE/Initial.css'
 import Header from '../../HOME/Header'
-import img from '../../IMAGE/logo.jpg'
+import { useNavigate } from 'react-router-dom'
+import { onAuthStateChanged } from 'firebase/auth'
+import { auth } from '../../../ADMIN/Data'
+import addCart from '../../REUSEDFUCNTION/addCart'
+import useFindData from '../../CUSTOMHOOK/useFindData'
 
 const Honda = () => {
+  const {bikes} = useFindData()
+  const [honda, setHonda] = useState([]);
+
+  const productNavigate = useNavigate()
+
+  useEffect(()=>{
+    const filterData = bikes.filter((items) => items.productBrand == "honda");
+    setHonda(filterData)
+  },[bikes])
+
+  const handleCart = (items) =>{
+    const unsubscribe = onAuthStateChanged(auth, (authUser) => {
+
+      addCart(authUser, items)
+    })
+
+    return () => unsubscribe();
+  }
+
   return (
     <>
     <Header />
       <div className='products'>
-        <div className='container'>
-            <img src={img} alt='img' />
+        {honda ? (
+          <>
+          {honda.map((items) => {
+            const {productName, productId, productPrice, productImage} = items;
+            return <div className='container' key={productId}>
+            <img src={productImage} alt='img' />
             <div className='content'>
                 <div className='details'>
-                    <h3>Model</h3>
-                    <p>tk</p>
+                    <h3>Model : {productName}</h3>
+                    <p>tk : {productPrice}</p>
                 </div>
                 <div className='button'>
-                    <button>Details</button>
-                    <button>Add to cart</button>
+                    <button onClick={()=> productNavigate(`/bike/${productId}`)}>Details</button>
+                    <button onClick={()=> handleCart(items)}>Add to cart</button>
                 </div>
             </div>
         </div>
+          })}
+          </>
+        ) : (<h1>Data is loading</h1>)}
     </div>
     </>
   )

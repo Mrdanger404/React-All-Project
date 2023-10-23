@@ -1,53 +1,48 @@
-import { Link } from 'react-router-dom'
+import { useNavigate} from 'react-router-dom'
 import '../../CSS/PRODUCTPAGE/Initial.css'
-import { database } from '../../../ADMIN/Data'
-import { ref, child, get, set } from 'firebase/database'
+import { auth, database } from '../../../ADMIN/Data'
+import { ref, set } from 'firebase/database'
 import { useState,useEffect } from 'react'
+import { onAuthStateChanged } from 'firebase/auth'
+import useFindData from '../../CUSTOMHOOK/useFindData'
 
 
 
 const Main = () => {
   const [combinedData, setCombinedData] = useState([]);
-  const [bikes, setBikes] = useState([]);
-  const [laptops, setLaptops] = useState([]);
-  const [mobiles, setMobiles] = useState([]);
-
-
-  const fetchDataAndMerge = async (category, setData) => {
-    const dbRef = ref(database);
-    const categoryRef = child(dbRef, category);
-    const snapshot = await get(categoryRef);
-    const categoryArray = [];
-    snapshot.forEach((childSnapshot) => {
-      categoryArray.push(childSnapshot.val());
-    });
-    setData(categoryArray);
-  };
+  const {bikes, laptops, mobiles} = useFindData();
+  
+  const productNavigate = useNavigate();
   useEffect(() => {
-    Promise.all([
-      fetchDataAndMerge("bike", setBikes),
-      fetchDataAndMerge("laptop", setLaptops),
-      fetchDataAndMerge("mobile", setMobiles)
-    ]).then(() => {
-      const mergedData = bikes.concat(laptops, mobiles);
-      setCombinedData(mergedData)
-    });
+
+    const mergeData = bikes.concat(laptops,mobiles);
+    setCombinedData(mergeData)
 
   },[bikes, laptops, mobiles])
 
   const handleCart = (products) => {
 
 
+    const unsubscribe = onAuthStateChanged(auth, (authUser) => {
+      if (authUser) {
+        set(ref(database, `cart/${authUser.uid}/${products.productId}`), {
+          productName : products.productName,
+          product: products.product,
+          productDetails: products.productDetails,
+          productImage: products.productImage,
+          productId: products.productId,
+          productPrice: products.productPrice
+        })
+        .then(()=>{
+          alert(`${products.productName} is added to cart`)
+        })
+      } else {
+        alert("Please sign in and try again")
+      }
+    })
 
-
-      set(ref(database, `cart/${products.productId}`), {
-        productName : products.productName,
-        product: products.product,
-        productDetails: products.productDetails,
-        productImage: products.productImage,
-        productId: products.productId,
-        productPrice: products.productPrice
-      })
+    return () => unsubscribe()
+      
     
   }
   return (
@@ -61,7 +56,7 @@ const Main = () => {
             <h3>Model: {productName}</h3>
             <p>tk {productPrice}</p>
             <div className='button'>
-                    <Link to={`product/${productId}`}>Details</Link>
+                    <button onClick={()=> productNavigate(`product/${productId}`)}>Details</button>
                     <button onClick={() => handleCart(items)}>Add to cart</button>
                 </div>
           </div>

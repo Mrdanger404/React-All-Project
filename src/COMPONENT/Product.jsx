@@ -1,54 +1,39 @@
 import { useParams } from "react-router-dom";
 import { useState, useEffect } from "react";
-import { database } from "../ADMIN/Data";
-import { ref, child, get } from 'firebase/database';
+import Header from "./HOME/Header";
+import useFindData from "./CUSTOMHOOK/useFindData";
+import './CSS/PRODUCTPAGE/Initial.css'
 
 const Product = () => {
     const { productId } = useParams();
-
-    const [bikes, setBikes] = useState([]);
-    const [laptops, setLaptops] = useState([]);
-    const [mobiles, setMobiles] = useState([]);
+    const {bikes, laptops, mobiles} = useFindData()
 
     const [info, setInfo] = useState(null);
 
-    const fetchDataAndMerge = async (category, setData) => {
-        const dbRef = ref(database);
-        const categoryRef = child(dbRef, category);
-        const snapshot = await get(categoryRef);
-        const categoryArray = [];
-        snapshot.forEach((childSnapshot) => {
-            categoryArray.push(childSnapshot.val());
-        });
-        setData(categoryArray);
-    };
-
     useEffect(() => {
-        Promise.all([
-            fetchDataAndMerge("bike", setBikes),
-            fetchDataAndMerge("laptop", setLaptops),
-            fetchDataAndMerge("mobile", setMobiles)
-        ]).then(() => {
-            const mergedData = bikes.concat(laptops, mobiles);
-            const data = mergedData.find((item) => item.productId === productId);
-            if (data) {
-                setInfo(data);
-            } else {
-                setInfo(null); // Set to null when product is not found
-            }
-        });
+        const margeData = bikes.concat(laptops, mobiles);
+        const data = margeData.find((item) => item.productId === productId);
+        if (data) {
+            setInfo(data)
+        } else {
+            setInfo(null)
+        }
     }, [bikes, laptops, mobiles, productId]);
-
+ 
+    console.log(info)
     return (
         <div>
+        <Header />
+            <div className="products">
             {info ? (
-                <div>
+                <div className="product-info">
                     <p>Product ID: {info.productId}</p>
-                    {/* Display other properties of 'info' here */}
+                    <p>product model : {info.productName}</p>
                 </div>
             ) : (
                 <div>Product not found</div>
             )}
+            </div>
         </div>
     );
 };

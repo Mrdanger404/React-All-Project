@@ -2,7 +2,7 @@
     display: flex;
     flex-wrap: wrap;
     overflow-y: scroll;
-    margin-top: 40px;
+    margin-top: 55px;
 }
 
 
@@ -14,7 +14,7 @@
     width: max-content;
     border-bottom: 1px solid black;
     border-right: 1px solid black;
-    margin: 10px;
+    margin: 50px 0 10px 10px;
 
 }
 

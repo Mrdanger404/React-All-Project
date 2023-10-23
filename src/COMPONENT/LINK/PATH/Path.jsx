@@ -14,6 +14,8 @@ import Login from "../../AUTHENTICATION/Login"
 import SignUp from "../../AUTHENTICATION/SignUp"
 import Product from "../../Product"
 
+import Search from "../../Search"
+
 import Dashboard from "../../../ADMIN/Dashboard"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 
@@ -39,6 +41,7 @@ const Path = () => {
             <Route exact path="/signup" Component={SignUp} />
             <Route exact path="/dashboard" Component={Dashboard} />
             <Route exact path="/product/:productId" Component={Product} />
+            <Route exact path="/search/:productModel" Component={Search} />
         </Routes>
     </BrowserRouter>
   )

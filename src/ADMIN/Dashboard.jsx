@@ -2,8 +2,10 @@ import { useState } from "react";
 import { database, storage } from "./Data";
 import { ref,set } from "firebase/database";
 import { ref as storageRef, uploadBytes, getDownloadURL } from "firebase/storage";
+import useSetData from "./useSetData";
 
 const Dashboard = () => {
+    const {bikeDetails, setBikeDetails, laptopDetails, setLaptopDetails, mobileDetails, setMobileDetails} = useSetData()
     // const [product, setProduct] = useState("");
     const [selectedProduct, setSelectedProduct] = useState({
         product: '',
@@ -14,6 +16,9 @@ const Dashboard = () => {
     const [productValue, setProductValue] = useState("");
     const [productImage, setProductImage] = useState(null);
     const [details, setDetails] = useState("")
+
+    const [offerId, setOfferId] = useState("");
+    const [offerImage, setOfferImage] = useState(null);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -26,26 +31,52 @@ const Dashboard = () => {
     
             // Get the download URL
             const downloadURL = await getDownloadURL(imageRef);
-            console.log("Download URL:", downloadURL);
     
             if (downloadURL) {
                 // Set the product data in the database
+                
                 await set(ref(database, `${selectedProduct.product}/${productName}`), {
                     product: selectedProduct.product,
+                    productBrand: selectedProduct.type,
                     productId: id,
                     productName: productName,
                     productPrice: productValue,
-                    productImage: downloadURL, // Store the download URL
-                    productDetails: details
-                });
+                    productImage: downloadURL,
+                    details: details,
+                    engine: bikeDetails.engine,
+                    power: bikeDetails.power,
+                    torque: bikeDetails.torque,
+                    mileage: bikeDetails.mileage,
+                    brakes: bikeDetails.brakes,
+                    tyreType: bikeDetails.tyreType
+                })
     
-                console.log("Data stored in the database.");
             }
         } catch (error) {
             console.error("Error:", error);
         }
     };
-    
+
+
+    const handleSetOffer = async (e) => {
+        e.preventDefault();
+        const offerImageRef = storageRef(storage, `offer/${offerId}`);
+
+        try {
+            await uploadBytes(offerImageRef, offerImage);
+
+            const offerImageUrl = await getDownloadURL(offerImageRef);
+            console.log('offer image',offerImageUrl)
+            if(offerImageUrl) {
+                await set(ref(database, `offer/${offerId}`), {
+                    offerImageUrl: offerImageUrl
+                });
+            }
+        } catch(error) {
+            console.log(error)
+        }
+    }
+    console.log(bikeDetails)
     return (
         <>
             <div>
@@ -79,12 +110,33 @@ const Dashboard = () => {
                             </>
                         )}
                     </select>
+                    {selectedProduct.product === "bike" && (
+                        <>
+                            <input type="number" placeholder="Enter engine cc " value={bikeDetails.engine} onChange={(e) => setBikeDetails({...bikeDetails, engine:e.target.value})} />
+                            <input type="number" placeholder="Enter engine cc " value={bikeDetails.power} onChange={(e) => setBikeDetails({...bikeDetails, power:e.target.value})} />
+                            <input type="number" placeholder="Enter engine cc " value={bikeDetails.torque} onChange={(e) => setBikeDetails({...bikeDetails, torque:e.target.value})} />
+                            <input type="number" placeholder="Enter engine cc " value={bikeDetails.mileage} onChange={(e) => setBikeDetails({...bikeDetails, mileage:e.target.value})} />
+                            <input type="text" placeholder="Enter engine cc " value={bikeDetails.brakes} onChange={(e) => setBikeDetails({...bikeDetails, brakes:e.target.value})} />
+                            <input type="text" placeholder="Enter engine cc " value={bikeDetails.tyreType} onChange={(e) => setBikeDetails({...bikeDetails, tyreType:e.target.value})} />
+                        </>
+                    )}
+                    {selectedProduct.product === "laptop" && (
+                        <>
+                            <input type="text" value={laptopDetails.processor} onChange={(e) => setLaptopDetails({...laptopDetails, processor:e.target.value})} />
+                            
+                        </>
+                    )}
                     <input type="number" placeholder="Product ID" value={id} onChange={(e) => setId(e.target.value)} />
                     <input type="text" placeholder="Product Name" value={productName} onChange={(e) => setProductName(e.target.value)} />
                     <input type="number" placeholder="Product Value" value={productValue} onChange={(e) => setProductValue(e.target.value)} />
                     <input type="file" onChange={(e) => setProductImage(e.target.files[0])} />
                     <textarea placeholder="Product Details" value={details} onChange={(e)=> setDetails(e.target.value)}></textarea>
                     <button type="submit">Submit</button>
+                </form>
+                <form onSubmit={handleSetOffer}>
+                    <input type="number" placeholder="Enter offer image id" value={offerId} onChange={(e) => setOfferId(e.target.value)} />
+                    <input type="file" onChange={(e) => setOfferImage(e.target.files[0])} />
+                    <button type="submit">Set offer</button>
                 </form>
             </div>
         </>

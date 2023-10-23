@@ -1,26 +1,37 @@
 import '../../CSS/PRODUCTPAGE/Initial.css'
-import img from '../../IMAGE/logo.jpg'
 import Header from '../../HOME/Header'
+import { useParams } from 'react-router-dom'
+import useFindData from '../../CUSTOMHOOK/useFindData'
+import { useEffect, useState } from 'react'
 
 
 const Laptop = () => {
+  const {laptop} = useParams();
+
+  const {laptops} = useFindData();
+
+  const [info, setInfo] = useState();
+
+  useEffect(() => {
+    const data = laptops.filter((items) => items.productId === laptop);
+    if(data) {
+      setInfo(data[0])
+    } else {
+      setInfo(null)
+    }
+  }, [laptop, laptops])
+
+  console.log(info)
   return (
     <>
     <Header />
       <div className='products'>
-        <div className='container'>
-            <img src={img} alt='img' />
-            <div className='content'>
-                <div className='details'>
-                    <h3>Model</h3>
-                    <p>tk</p>
-                </div>
-                <div className='button'>
-                    <button>Details</button>
-                    <button>Add to cart</button>
-                </div>
-            </div>
-        </div>
+        {info ? (
+          <div className='product-info'>
+            <p>product Id : {info.product}</p>
+            <p>Product model : {info.productName}</p>
+          </div>
+        ) : (<h1>Details is loading...</h1>)}
     </div>
     </>
   )
