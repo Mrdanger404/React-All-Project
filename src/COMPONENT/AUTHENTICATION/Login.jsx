@@ -1,51 +1,61 @@
-import { Link, useNavigate } from "react-router-dom"
-import '../CSS/AUTHENTICATION/Login.css'
-import { auth } from "../../ADMIN/Data"
-import { signInWithEmailAndPassword } from "firebase/auth"
-import { useState } from "react"
+import { onAuthStateChanged, signInWithEmailAndPassword } from "firebase/auth";
+import { useEffect, useState } from "react"
+import { auth } from "../DATABASE/Config";
+import { NavLink, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css'
+
 
 const Login = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const signUpNavigate = useNavigate();
   const homeNavigate = useNavigate();
+  const signUpNavigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleLogin = (e) => {
-    e.preventDefault();
 
+  useEffect(()=>{
+    const unsubscribe = auth.onAuthStateChanged((authUser) => {
+
+      if(authUser){
+        homeNavigate(`/${authUser?.uid}`)
+      }
+      
+    })
+
+    return () => unsubscribe()
+  },[homeNavigate])
+  const login = (e) => {
+
+    e.preventDefault()
+    
     signInWithEmailAndPassword(auth, email, password)
     .then(() => {
-      alert(`${email} is successfully logged in`)
-      homeNavigate("/")
+      alert(`${email} is logged in successful`)
     })
-    .catch((erro) => {
-      if (erro.code) {
-        alert(`${email} is not registered`)
-        signUpNavigate("/signup")
+    .catch((error) => {
+      console.log(error.code)
+      if(error.code == "auth/user-disabled"){
+        toast.error('Your account is disabled')
+      }
+      if(error.code == "auth/invalid-login-credentials"){
+        toast.error('Your account is not registered')
       }
     })
   }
   return (
     <>
-      <div className="login-container">
-        <div className="login-card-container">
-        <div className="login-card">
-          <h1>Login</h1>
-          <div className="login">
-              <form onSubmit={handleLogin}>
-                <input type="email" placeholder="Enter your email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                <input type="password" placeholder="Enter your password" value={password} onChange={(e) => setPassword(e.target.value)} />
-                <button>Login</button>
-              </form>
-          </div>
-        </div>
-        <div className="login-page-button">
-          <Link to="/signup" className="link login-page">SignUp</Link>
-          <Link to="/" className="link login-page">Home</Link>
-        </div>
-        </div>
+    <ToastContainer />
+    <div className="h-screen flex items-center justify-center">
+      <div className="p-5  w-[300px] flex flex-col items-center justify-center rounded-3xl shadow-2xl">
+        <form onSubmit={login} className="flex flex-col w-[250px] ">
+          <input type="email" required placeholder="Enter your email" onChange={(e) => setEmail(e.target.value)} className="my-2 p-3 rounded-3xl border border-black "/>
+          <input type="password" required placeholder="Enter your password" onChange={(e) => setPassword(e.target.value)} className="my-2 p-3 rounded-3xl border border-black" />
+          <button type="submit" className="my-2 bg-black text-white h-10 rounded-3xl transition hover:bg-green-600 hover:shadow-2xl duration-500">Login</button>
+        </form>
+        <button className="my-2 bg-black text-white h-10 rounded-3xl transition hover:bg-green-600 hover:shadow-2xl duration-500 w-full" onClick={() => signUpNavigate('/signup')}>SingUp</button>
+        <NavLink to={'/contact'} className='text-center text-blue-700 hover:text-red-800 font-semibold'>If you forgot password contact admin with email</NavLink>
       </div>
+    </div>
     </>
   )
 }
